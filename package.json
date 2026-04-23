@@ -1,6 +1,6 @@
 {
-  "name": "useapassphrase",
-  "version": "0.0.1",
+  "name": "passphrase-party",
+  "version": "1.0.0",
   "description": "A random passphrase generator and site.",
   "main": "Gruntfile.js",
   "dependencies": {
