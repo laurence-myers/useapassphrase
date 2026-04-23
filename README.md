@@ -1,6 +1,6 @@
-# Use A Passphrase (.com)
+# Passphrase Party (passphrase.party)
 
-This site is intended to both generate simple passphrases as well as advocate
+This site is intended to generate simple passphrases and advocate
 for the use of random passphrases over human-generated passwords.
 
 # How to Contribute
