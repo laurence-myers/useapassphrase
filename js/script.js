@@ -19,11 +19,11 @@ function generatePassword(numberOfWords) {
 
   // Grab a random word, push it to the password array
   for (let i = 0; i < numberOfWords; i++) {
-      const index = Math.min(
-          Math.floor(randomNumberBetweenZeroAndOne() * wordlist.length),
-          wordlist.length - 1
-      );
-      generatedPasswordArray.push(wordlist[index]);
+    const index = Math.min(
+      Math.floor(randomNumberBetweenZeroAndOne() * wordlist.length),
+      wordlist.length - 1,
+    );
+    generatedPasswordArray.push(wordlist[index]);
   }
 
   return generatedPasswordArray.join(' ');
@@ -50,7 +50,10 @@ function convertSecondsToReadable(seconds) {
   if (numMilliseconds < 1) {
     timeString = 'less than 1 millisecond';
   } else if (numMilliseconds < 1000) {
-    timeString = Math.floor(numMilliseconds) + ' millisecond' + (numMilliseconds === 1 ? '' : 's');
+    timeString =
+      Math.floor(numMilliseconds) +
+      ' millisecond' +
+      (numMilliseconds === 1 ? '' : 's');
   } else if (numSeconds < 60) {
     timeString = numSeconds + ' second' + (numSeconds === 1 ? '' : 's');
   } else if (numMinutes < 60) {
@@ -70,7 +73,9 @@ function convertSecondsToReadable(seconds) {
 
 function calculateAndSetCrackTime() {
   const timeToCrack = zxcvbn(passwordField.value);
-  const readableCrackTime = convertSecondsToReadable(timeToCrack.crack_times_seconds.offline_fast_hashing_1e10_per_second);
+  const readableCrackTime = convertSecondsToReadable(
+    timeToCrack.crack_times_seconds.offline_fast_hashing_1e10_per_second,
+  );
   document.querySelector('.crack-time').innerHTML = readableCrackTime;
 }
 
@@ -79,20 +84,20 @@ function init() {
   passwordField = document.getElementById('passphrase');
   const button = document.querySelector('.btn-generate');
 
-// Initially run it upon load
-  const passphrase = generatePassword(4)
+  // Initially run it upon load
+  const passphrase = generatePassword(4);
   passwordField.setAttribute('value', passphrase);
   calculateAndSetCrackTime();
 
-// Listen for a button click
-  button.addEventListener('click', function() {
+  // Listen for a button click
+  button.addEventListener('click', function () {
     const numberOfWords = selectField.options[selectField.selectedIndex].value;
     passwordField.value = generatePassword(numberOfWords);
     setStyleFromWordNumber(passwordField, numberOfWords);
     calculateAndSetCrackTime();
   });
 
-// Listen for password value change
+  // Listen for password value change
   passwordField.addEventListener('input', function (_evt) {
     calculateAndSetCrackTime();
   });
