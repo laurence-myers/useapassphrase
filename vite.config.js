@@ -1,7 +1,7 @@
-﻿import { viteSingleFile } from 'vite-plugin-singlefile';
+﻿import * as fs from 'node:fs';
 import * as marked from 'marked';
-import * as fs from 'node:fs';
 import { defineConfig } from 'vite';
+import { viteSingleFile } from 'vite-plugin-singlefile';
 
 const advocateHtml = marked.parse(
   fs.readFileSync('passphrase_advocate.md', 'utf-8'),

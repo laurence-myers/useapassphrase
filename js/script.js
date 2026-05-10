@@ -1,5 +1,3 @@
-'use strict';
-
 import zxcvbn from 'zxcvbn';
 import wordlist from './wordlist';
 
@@ -90,7 +88,7 @@ function init() {
   calculateAndSetCrackTime();
 
   // Listen for a button click
-  button.addEventListener('click', function () {
+  button.addEventListener('click', () => {
     const numberOfWords = selectField.options[selectField.selectedIndex].value;
     passwordField.value = generatePassword(numberOfWords);
     setStyleFromWordNumber(passwordField, numberOfWords);
@@ -98,7 +96,7 @@ function init() {
   });
 
   // Listen for password value change
-  passwordField.addEventListener('input', function (_evt) {
+  passwordField.addEventListener('input', (_evt) => {
     calculateAndSetCrackTime();
   });
 }
