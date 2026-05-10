@@ -5,7 +5,7 @@ let passwordField;
 
 // Cryptographic replacement for Math.random()
 function randomNumberBetweenZeroAndOne() {
-  const crypto = window.crypto || window.msCrypto;
+  const crypto = window.crypto;
   return crypto.getRandomValues(new Uint32Array(1))[0] / 4294967295;
 }
 
@@ -28,9 +28,9 @@ function generatePassword(numberOfWords) {
 }
 
 function setStyleFromWordNumber(passwordField, numberOfWords) {
-  const baseSize = '40';
+  const baseSize = 40;
   const newSize = baseSize * (4 / numberOfWords);
-  passwordField.setAttribute('style', 'font-size: ' + newSize + 'px;');
+  passwordField.setAttribute('style', 'font-size: ' + String(newSize) + 'px;');
 }
 
 function convertSecondsToReadable(seconds) {
@@ -78,7 +78,9 @@ function calculateAndSetCrackTime() {
 }
 
 function init() {
-  const selectField = document.getElementById('passphrase_select');
+  const selectField: HTMLSelectElement = document.getElementById(
+    'passphrase_select',
+  ) as HTMLSelectElement;
   passwordField = document.getElementById('passphrase');
   const button = document.querySelector('.btn-generate');
 
