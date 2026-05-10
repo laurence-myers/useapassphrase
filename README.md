@@ -3,21 +3,25 @@
 This site is intended to generate simple passphrases and advocate
 for the use of random passphrases over human-generated passwords.
 
-# How to Contribute
+## Local Development
 
-This site needs a lot of work. Please contribute to any of the following:
+```shell
+npm install
+npm run vite
+```
 
-* To improving the persuasiveness of the argument, which is all contained in
-  `passphrase_advocate.md`.
-* To the wordlist from which the passwords are generated, which is contained in `js/wordlist.js`
-* Add additional password possibilities (e.g. four-word-with-space).
+## Build
 
-# Running It Locally
+```shell
+npm run vite:build
+```
 
-It requires grunt-cli (`npm install -g grunt-cli`), after which you can just
-run `npm install` and then `grunt`.
+Alternatively, via Docker:
 
-If you have Docker & Docker Compose installed, you should theoretically just be
-able to run `docker-compose up` to build the /dist directory, which will create
-the index.html file that is entirely self-contained (i.e. it makes no external
-calls).
+```shell
+docker compose up
+```
+
+This will produce a self-contained HTML file in `dist/index.html`, which
+you can open from your local filesystem. It will not make any network
+requests.

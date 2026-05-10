@@ -1,8 +1,13 @@
 'use strict';
 
+import zxcvbn from 'zxcvbn';
+import wordlist from './wordlist';
+
+let passwordField;
+
 // Cryptographic replacement for Math.random()
 function randomNumberBetweenZeroAndOne() {
-  var crypto = window.crypto || window.msCrypto;
+  const crypto = window.crypto || window.msCrypto;
   return crypto.getRandomValues(new Uint32Array(1))[0] / 4294967295;
 }
 
@@ -10,12 +15,14 @@ function generatePassword(numberOfWords) {
   numberOfWords = parseInt(numberOfWords);
 
   // Empty array to be filled with wordlist
-  var generatedPasswordArray = [];
-
+  const generatedPasswordArray = [];
 
   // Grab a random word, push it to the password array
-  for (var i = 0; i < numberOfWords; i++) {
-      var index = Math.floor(randomNumberBetweenZeroAndOne() * wordlist.length)
+  for (let i = 0; i < numberOfWords; i++) {
+      const index = Math.min(
+          Math.floor(randomNumberBetweenZeroAndOne() * wordlist.length),
+          wordlist.length - 1
+      );
       generatedPasswordArray.push(wordlist[index]);
   }
 
@@ -23,66 +30,72 @@ function generatePassword(numberOfWords) {
 }
 
 function setStyleFromWordNumber(passwordField, numberOfWords) {
-  var baseSize = '40';
-  var newSize = baseSize * (4/numberOfWords);
+  const baseSize = '40';
+  const newSize = baseSize * (4 / numberOfWords);
   passwordField.setAttribute('style', 'font-size: ' + newSize + 'px;');
 }
 
 function convertSecondsToReadable(seconds) {
-  var timeString = '';
-  var crackabilityColor = 'green';
+  let timeString = '';
 
   // Enumerate all the numbers
-  var numMilliseconds = seconds * 1000;
-  var numSeconds     = Math.floor(seconds);
-  var numMinutes     = Math.floor(numSeconds / 60);
-  var numHours       = Math.floor(numSeconds / (60 * 60));
-  var numDays        = Math.floor(numSeconds / (60 * 60 * 24));
-  var numYears       = Math.floor(numSeconds / (60 * 60 * 24 * 365));
-  var numCenturies   = Math.floor(numSeconds / (60 * 60 * 24 * 365 * 100));
+  const numMilliseconds = seconds * 1000;
+  const numSeconds = Math.floor(seconds);
+  const numMinutes = Math.floor(numSeconds / 60);
+  const numHours = Math.floor(numSeconds / (60 * 60));
+  const numDays = Math.floor(numSeconds / (60 * 60 * 24));
+  const numYears = Math.floor(numSeconds / (60 * 60 * 24 * 365));
+  const numCenturies = Math.floor(numSeconds / (60 * 60 * 24 * 365 * 100));
 
-  if (numMilliseconds < 1000) {
-    timeString = numMilliseconds + ' milliseconds';
+  if (numMilliseconds < 1) {
+    timeString = 'less than 1 millisecond';
+  } else if (numMilliseconds < 1000) {
+    timeString = Math.floor(numMilliseconds) + ' millisecond' + (numMilliseconds === 1 ? '' : 's');
   } else if (numSeconds < 60) {
-    timeString = numSeconds + ' seconds';
+    timeString = numSeconds + ' second' + (numSeconds === 1 ? '' : 's');
   } else if (numMinutes < 60) {
-    timeString = numMinutes + ' minutes';
+    timeString = numMinutes + ' minute' + (numMinutes === 1 ? '' : 's');
   } else if (numHours < 24) {
-    timeString = numHours + ' hours';
+    timeString = numHours + ' hour' + (numHours === 1 ? '' : 's');
   } else if (numDays < 365) {
-    timeString = numDays + ' days';
-  } else if (numYears < 100) {
-    timeString = numYears + ' years';
+    timeString = numDays + ' day' + (numDays === 1 ? '' : 's');
+  } else if (numYears < 1000000) {
+    timeString = numYears + ' year' + (numYears === 1 ? '' : 's');
   } else {
-    timeString = numCenturies + ' centuries';
+    timeString = numCenturies + ' centur' + (numCenturies === 1 ? 'y' : 'ies');
   }
 
-  return timeString.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return timeString.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 function calculateAndSetCrackTime() {
-  var timeToCrack = zxcvbn(passwordField.value);
-  var readableCrackTime = convertSecondsToReadable(timeToCrack.crack_time);
+  const timeToCrack = zxcvbn(passwordField.value);
+  const readableCrackTime = convertSecondsToReadable(timeToCrack.crack_times_seconds.offline_fast_hashing_1e10_per_second);
   document.querySelector('.crack-time').innerHTML = readableCrackTime;
 }
 
-var selectField = document.getElementById('passphrase_select');
-var passwordField = document.getElementById('passphrase');
-var button = document.querySelector('.btn-generate');
+function init() {
+  const selectField = document.getElementById('passphrase_select');
+  passwordField = document.getElementById('passphrase');
+  const button = document.querySelector('.btn-generate');
 
 // Initially run it upon load
-passwordField.setAttribute('value', generatePassword(4));
-calculateAndSetCrackTime();
+  const passphrase = generatePassword(4)
+  passwordField.setAttribute('value', passphrase);
+  calculateAndSetCrackTime();
 
 // Listen for a button click
-button.addEventListener('click', function() {
-  var numberOfWords = selectField.options[selectField.selectedIndex].value;
-  passwordField.value = generatePassword(numberOfWords);
-  setStyleFromWordNumber(passwordField, numberOfWords);
-  calculateAndSetCrackTime();
-});
+  button.addEventListener('click', function() {
+    const numberOfWords = selectField.options[selectField.selectedIndex].value;
+    passwordField.value = generatePassword(numberOfWords);
+    setStyleFromWordNumber(passwordField, numberOfWords);
+    calculateAndSetCrackTime();
+  });
 
 // Listen for password value change
-passwordField.addEventListener('input', function (evt) {
-  calculateAndSetCrackTime();
-});
+  passwordField.addEventListener('input', function (_evt) {
+    calculateAndSetCrackTime();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);

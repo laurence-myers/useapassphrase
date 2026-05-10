@@ -1,5 +1,10 @@
-nodebuild:
-  build: .
-  volumes:
-   - .:/code
-  command: grunt
+services:
+  nodebuild:
+    build: .
+    volumes:
+     - .:/code
+     - node_modules:/code/node_modules
+    command: npm run vite:build
+
+volumes:
+  node_modules:

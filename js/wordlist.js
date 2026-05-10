@@ -1,4 +1,4 @@
-var wordlist = [
+const wordlist = [
   'abacus',
   'abdomen',
   'abdominal',
@@ -7776,3 +7776,5 @@ var wordlist = [
   'zoology',
   'zoom'
 ];
+
+export default wordlist;

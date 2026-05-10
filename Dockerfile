@@ -1,8 +1,6 @@
-FROM node
+FROM node:24-slim
 
 ADD . /code
 WORKDIR /code
 
-RUN npm install -g grunt-cli
-RUN npm install
-
+RUN npm ci
