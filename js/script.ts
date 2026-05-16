@@ -1,19 +1,17 @@
 import zxcvbn from 'zxcvbn';
 import wordlist from './wordlist';
 
-let passwordField;
+let passwordField: HTMLInputElement | undefined;
 
 // Cryptographic replacement for Math.random()
-function randomNumberBetweenZeroAndOne() {
+function randomNumberBetweenZeroAndOne(): number {
   const crypto = window.crypto;
   return crypto.getRandomValues(new Uint32Array(1))[0] / 4294967295;
 }
 
-function generatePassword(numberOfWords) {
-  numberOfWords = parseInt(numberOfWords);
-
+function generatePassword(numberOfWords: number): string {
   // Empty array to be filled with wordlist
-  const generatedPasswordArray = [];
+  const generatedPasswordArray: string[] = [];
 
   // Grab a random word, push it to the password array
   for (let i = 0; i < numberOfWords; i++) {
@@ -27,13 +25,13 @@ function generatePassword(numberOfWords) {
   return generatedPasswordArray.join(' ');
 }
 
-function setStyleFromWordNumber(passwordField, numberOfWords) {
+function setStyleFromWordNumber(passwordField: HTMLElement, numberOfWords: number): void {
   const baseSize = 40;
   const newSize = baseSize * (4 / numberOfWords);
   passwordField.setAttribute('style', 'font-size: ' + String(newSize) + 'px;');
 }
 
-function convertSecondsToReadable(seconds) {
+function convertSecondsToReadable(seconds: number): string {
   let timeString = '';
 
   // Enumerate all the numbers
@@ -69,7 +67,7 @@ function convertSecondsToReadable(seconds) {
   return timeString.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-function calculateAndSetCrackTime() {
+function calculateAndSetCrackTime(): void {
   const timeToCrack = zxcvbn(passwordField.value);
   const readableCrackTime = convertSecondsToReadable(
     timeToCrack.crack_times_seconds.offline_fast_hashing_1e10_per_second,
@@ -77,11 +75,11 @@ function calculateAndSetCrackTime() {
   document.querySelector('.crack-time').innerHTML = readableCrackTime;
 }
 
-function init() {
+function init(): void {
   const selectField: HTMLSelectElement = document.getElementById(
     'passphrase_select',
   ) as HTMLSelectElement;
-  passwordField = document.getElementById('passphrase');
+  passwordField = document.getElementById('passphrase') as HTMLInputElement;
   const button = document.querySelector('.btn-generate');
 
   // Initially run it upon load
@@ -91,7 +89,8 @@ function init() {
 
   // Listen for a button click
   button.addEventListener('click', () => {
-    const numberOfWords = selectField.options[selectField.selectedIndex].value;
+    const numberOfWordsString = selectField.options[selectField.selectedIndex].value;
+    const numberOfWords = parseInt(numberOfWordsString, 10);
     passwordField.value = generatePassword(numberOfWords);
     setStyleFromWordNumber(passwordField, numberOfWords);
     calculateAndSetCrackTime();
