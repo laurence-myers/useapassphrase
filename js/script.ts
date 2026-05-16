@@ -1,7 +1,6 @@
 import zxcvbn from 'zxcvbn';
 import wordlist from './wordlist';
-
-let passwordField: HTMLInputElement | undefined;
+import { pageObject } from './pageObject';
 
 // Cryptographic replacement for Math.random()
 function randomNumberBetweenZeroAndOne(): number {
@@ -25,14 +24,17 @@ function generatePassword(numberOfWords: number): string {
   return generatedPasswordArray.join(' ');
 }
 
-function setStyleFromWordNumber(passwordField: HTMLElement, numberOfWords: number): void {
+function setStyleFromWordNumber(
+  passwordField: HTMLElement,
+  numberOfWords: number,
+): void {
   const baseSize = 40;
   const newSize = baseSize * (4 / numberOfWords);
   passwordField.setAttribute('style', 'font-size: ' + String(newSize) + 'px;');
 }
 
 function convertSecondsToReadable(seconds: number): string {
-  let timeString = '';
+  let timeString: string;
 
   // Enumerate all the numbers
   const numMilliseconds = seconds * 1000;
@@ -68,28 +70,25 @@ function convertSecondsToReadable(seconds: number): string {
 }
 
 function calculateAndSetCrackTime(): void {
-  const timeToCrack = zxcvbn(passwordField.value);
+  const timeToCrack = zxcvbn(pageObject.passwordField().value);
   const readableCrackTime = convertSecondsToReadable(
     timeToCrack.crack_times_seconds.offline_fast_hashing_1e10_per_second,
   );
-  document.querySelector('.crack-time').innerHTML = readableCrackTime;
+  pageObject.crackTime().innerHTML = readableCrackTime;
 }
 
 function init(): void {
-  const selectField: HTMLSelectElement = document.getElementById(
-    'passphrase_select',
-  ) as HTMLSelectElement;
-  passwordField = document.getElementById('passphrase') as HTMLInputElement;
-  const button = document.querySelector('.btn-generate');
-
   // Initially run it upon load
   const passphrase = generatePassword(4);
+  const passwordField = pageObject.passwordField();
   passwordField.setAttribute('value', passphrase);
   calculateAndSetCrackTime();
 
   // Listen for a button click
-  button.addEventListener('click', () => {
-    const numberOfWordsString = selectField.options[selectField.selectedIndex].value;
+  pageObject.button().addEventListener('click', () => {
+    const selectField = pageObject.passphraseSelect();
+    const numberOfWordsString =
+      selectField.options[selectField.selectedIndex].value;
     const numberOfWords = parseInt(numberOfWordsString, 10);
     passwordField.value = generatePassword(numberOfWords);
     setStyleFromWordNumber(passwordField, numberOfWords);
