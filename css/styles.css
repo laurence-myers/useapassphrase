@@ -1,25 +1,33 @@
 * {
   font-family: 'MH';
-  line-height: 160%;
+  line-height: 130%;
 }
 body {
+  background-blend-mode: multiply;
+  background-color: rgba(255, 128, 255, 0.1);
+  background-image: url(../img/background.png);
+  background-size: 70%;
   margin: 0;
   padding: 0;
 }
 h1 {
   text-transform: uppercase;
   text-align: center;
-  font: 100 72px 'MH';
-  margin: 0 auto 20px auto;
+  font: 400 72px 'MH';
+  height: 1.3em;
+  margin: 0;
 }
-h1 span {
-  font-weight: 400;
+hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0));
+  margin: 2em 0;
 }
 input {
   display: block;
   margin: 0 auto;
-  font-size: 40px;
-  height: 60px;
+  font-size: 32px;
+  height: 40px;
   width: 90%;
   text-align: center;
   padding: 1%;
@@ -51,14 +59,11 @@ button {
   transition: all 0.2s ease;
 }
 button:hover {
-  background-color: #5dfa7b;
+  background-color: #a80e8e;
   color: white;
 }
 button:active {
-  background-color: #48c260;
-}
-p {
-  margin: 20px 0;
+  background-color: #97137d;
 }
 table {
   width: 95%;
@@ -80,15 +85,33 @@ li {
   padding-bottom: 6px;
   padding-top: 6px;
 }
+.advocate-section {
+  font-size: 90%;
+}
 .container {
+  background: rgba(255, 255, 255, 0.95);
   width: 95%;
   max-width: 768px;
   margin: 0 auto;
+  padding: 20px 20px 20px 20px;
 }
 .header {
+  background-image: url(../img/banner.png);
+  color: white;
   text-align: center;
-  margin-top: 10px;
+  text-shadow:
+          1px 0px 1px #000,
+          0px 1px 1px #000,
+          0px -1px 1px #000,
+          -1px 0px 1px #000;
+  width: 100%;
 }
+
+.header .title {
+  background-color: rgba(175, 048, 175, 0.5);
+  padding: 0.5em 0;
+}
+
 .passphrase-label {
   margin: 0 auto 3px auto;
   font-size: 75%;
@@ -120,9 +143,7 @@ li {
   vertical-align: middle;
   padding-top: 10px;
   padding-bottom: 10px;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  margin: 50px 0;
+  margin: 0 0 2em 0;
 }
 .social-buttons svg {
   vertical-align: middle;
@@ -149,8 +170,9 @@ code,
   font-family: 'Courier New', Courier, monospace;
   font-weight: 700;
 }
+
 .footer {
-  background-color: #eee;
+  background-color: #eeee;
   border-top: 1px solid #aaa;
   font-size: 80%;
   margin-top: 40px;
@@ -159,8 +181,21 @@ code,
   padding-top: 30px;
   padding-bottom: 40px;
 }
+
+.footer h4 {
+  margin-bottom: 0;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
 .footer p {
+  font-size: 0.9em;
   margin: 0;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 0.5em;
+}
+
+.footer .container {
+  padding-top: 20px;
 }
