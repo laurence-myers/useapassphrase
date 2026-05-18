@@ -33,7 +33,8 @@ function setStyleFromWordNumber(
   passwordField.setAttribute('style', 'font-size: ' + String(newSize) + 'px;');
 }
 
-function convertSecondsToReadable(seconds: number): string {
+function convertSecondsToReadable(seconds: number | string): string {
+  seconds = Number(seconds);
   let timeString: string;
 
   // Enumerate all the numbers

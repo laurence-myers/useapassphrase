@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
+    "@types/zxcvbn": "^4.4.5",
     "marked": "^18.0.3",
     "vite": "^8.0.10",
     "vite-plugin-singlefile": "^2.3.3"
